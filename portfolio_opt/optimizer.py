@@ -18,7 +18,7 @@ class Optimizer:
         self.ef.max_sharpe(risk_free_rate=rf)
 
     def plot_cov(self):
-        ax = sns.heatmap(self.S, vmin=-1, vmax=1, cmap="YlGnBu")
+        ax = sns.heatmap(self.S, cmap="YlGnBu")
         ax.figure.tight_layout()
 
     def plot_efficient_frontier(self):
@@ -45,5 +45,6 @@ class Optimizer:
             stock_weights.append(weights)
             sharpe_ratio.append((port_return - self.rf) / volatility)
         plt.scatter(port_volatility, port_returns, alpha=0.5, c=sharpe_ratio)
-        plt.colorbar()
+        clb = plt.colorbar()
+        clb.set_label('Sharpe Ratio', labelpad=0, y=1.05, rotation=0)
         return port_returns, port_volatility, stock_weights
