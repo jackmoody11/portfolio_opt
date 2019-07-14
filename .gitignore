@@ -1,0 +1,12 @@
+
+# Virtual Environment
+venv/
+
+# Editor
+.vscode/
+*.code-workspace
+*.env
+
+# Mac specific files
+.DS_Store
+

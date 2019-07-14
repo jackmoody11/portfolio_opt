@@ -1,0 +1,5 @@
+pandas
+pyportfolioopt
+numpy
+matplotlib
+seaborn
