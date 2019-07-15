@@ -11,15 +11,12 @@ class Optimizer:
     def __init__(self, file, sheet_name, rf=0.02):
         df = pd.read_excel(
             file, parse_dates=True, index_col="date", sheet_name=sheet_name).sort_index(ascending=True)
+        df_pct = df.pct_change()
         self.mu = expected_returns.mean_historical_return(df)
         self.rf = rf
         self.S = risk_models.sample_cov(df)
         self.ef = EfficientFrontier(self.mu, self.S)
         self.ef.max_sharpe(risk_free_rate=rf)
-
-    def plot_cov(self):
-        ax = sns.heatmap(self.S, cmap="YlGnBu")
-        ax.figure.tight_layout()
 
     def plot_efficient_frontier(self):
         cla = CLA(self.mu, self.S)
