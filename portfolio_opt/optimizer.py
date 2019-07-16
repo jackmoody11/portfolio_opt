@@ -18,10 +18,14 @@ class Optimizer:
         self.ef = EfficientFrontier(self.mu, self.S)
         self.ef.max_sharpe(risk_free_rate=rf)
 
-    def plot_efficient_frontier(self):
+    def _get_efficient_weights(self):
         cla = CLA(self.mu, self.S)
         cla.max_sharpe()
         (mu, sigma, weights) = cla.efficient_frontier()
+        return mu, sigma, weights
+
+    def plot_efficient_frontier(self):
+        mu, sigma, weights = self._get_efficient_weights()
         plt.plot(sigma, mu)
         plt.xlabel("Expected Volatility")
         plt.ylabel("Expected Return")
