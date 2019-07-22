@@ -2,16 +2,17 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+from functools import reduce
 from pypfopt import expected_returns, risk_models
 from pypfopt.efficient_frontier import EfficientFrontier
 from pypfopt.cla import CLA
 
 
 class Optimizer:
-    def __init__(self, file, sheet_name, rf=0.02):
-        df = pd.read_excel(
-            file, parse_dates=True, index_col="date", sheet_name=sheet_name).sort_index(ascending=True)
+    def __init__(self, dfs, on='date', rf=0.02):
+        df = reduce(lambda left,right: pd.merge(left,right,on=on), dfs)
         df_pct = df.pct_change()
+        self.prices = df
         self.mu = expected_returns.mean_historical_return(df)
         self.rf = rf
         self.S = risk_models.sample_cov(df)
@@ -31,7 +32,7 @@ class Optimizer:
         plt.ylabel("Expected Return")
         plt.title("Markowitz Efficient Frontier Model")
 
-    def plot_random_portfolios(self, num_portfolios=50000):
+    def plot_random_portfolios(self, num_portfolios=10000):
         num_assets = len(self.mu)
         port_returns, port_volatility, stock_weights = [], [], []
         sharpe_ratio = []
